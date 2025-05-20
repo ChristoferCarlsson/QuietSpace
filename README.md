@@ -96,11 +96,11 @@ En sparad plats från en användare.
 ---
 #### 🛠️ Teknikstack
 
-- Frontend: React / Next.js
+- Frontend: 
 
-- Backend: Node.js / Express
+- Backend: 
 
-- Databas: PostgreSQL eller MongoDB
+- Databas: SQL 
 
 - Kartor: Leaflet.js eller Google Maps API
 
