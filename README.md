@@ -1,68 +1,121 @@
 # 📱 QuietSpace
 
-QuietSpace är en mobilvänlig webbapp som hjälper dig att hitta lugna och tysta platser i din stad – perfekta för introverta, studenter eller dig som bara vill ta en paus från vardagens brus. Hitta bibliotek, parker, tysta caféer och mycket mer baserat på användarrecensioner och rekommendationer.
-
-## 🌟 Funktioner
-
-- 🔍 Sök och filtrera tysta platser baserat på kategori, taggar eller betyg
-- 📝 Läs och skriv recensioner för olika platser
-- 📍 Se platsinformation med karta och koordinater
-- 📌 Spara favoritplatser som bokmärken
-- 👤 Skapa ett konto och anpassa dina preferenser
+QuietSpace är en mobilvänlig app som hjälper dig hitta lugna och tysta platser i din stad – perfekta för introverta, studenter och alla som behöver en paus från stadens brus. Hitta bibliotek, parker, tysta caféer och mycket mer.
 
 ---
 
-## 🧱 Datamodell
+## 🌟 Funktioner
 
-### 🧑‍💻 User (Användare)
+- 🔍 Sök efter tysta platser baserat på kategori eller taggar
+- 📝 Läs och skriv recensioner
+- 📌 Spara dina favoritplatser som bokmärken
+- 👤 Skapa en användarprofil och hantera dina inställningar
+- 🗺️ Se alla platser direkt på en karta
+
+---
+
+## 🧱 Datamodeller & Funktionalitet
+
+### 👤 User (Användare)
+
 Representerar en användare i systemet.
-- `name`: Namn på användaren
-- `email`: E-postadress (unik)
-- `password`: Krypterat lösenord
-- `preferences`: Valfria inställningar eller intressen
 
-**Relationer:**
-- Har många `reviews`
-- Har många `bookmarks`
+#### 🔧 Funktioner
+
+- **Registrera konto & logga in**  
+  Skapa konto med namn, e-post och lösenord.
+
+- **Spara preferenser**  
+  Möjlighet att ange personliga inställningar (t.ex. favorittaggar).
+
+- **Skriva recensioner**  
+  Lämna recensioner på olika tysta platser.
+
+- **Spara bokmärken**  
+  Spara platser för snabb åtkomst senare.
+
+#### 🔗 Relationer
+
+- Kan skriva flera `Review`s  
+- Kan spara flera `Bookmark`s
 
 ---
 
 ### 🗺️ QuietPlace (Tyst plats)
-Representerar en tyst plats, t.ex. ett bibliotek, park eller café.
-- `name`: Namn på platsen
-- `address`: Adress
-- `lat`, `lng`: Geografiska koordinater
-- `category`: Typ av plats (bibliotek, park etc.)
-- `average_rating`: Genomsnittligt betyg (beräknat från recensioner)
-- `tags`: Lista av taggar för filtrering (ex: lugnt, wifi, kaffe)
 
-**Relationer:**
-- Har många `reviews`
-- Har många `bookmarks`
+Representerar en tyst plats i staden, t.ex. bibliotek, park eller café.
+
+#### 🔧 Funktioner
+
+- **Skapa och spara en ny plats**  
+  Registrera namn, adress, koordinater, kategori och taggar.
+
+- **Filtrera & sök bland platser**  
+  Filtrering via kategori eller taggar.
+
+- **Visa platsinformation**  
+  All platsdata kan visas på karta eller detaljsida.
+
+- **Beräkna genomsnittligt betyg**  
+  Dynamisk uppdatering baserat på recensioner.
+
+- **Visa recensioner & bokmärken**  
+  Lista alla kopplade recensioner och hur många som har bokmärkt platsen.
+
+#### 🔗 Relationer
+
+- Har många `Review`s  
+- Kan bokmärkas av många `User`s
 
 ---
 
 ### ✍️ Review (Recension)
-Recension av en plats, skapad av en användare.
-- `rating`: Betyg (t.ex. 1–5)
-- `comment`: Textkommentar
-- `date`: Datum för recensionen
-- `user_id`: Referens till användaren
-- `quiet_place_id`: Referens till platsen
+
+En användares bedömning av en tyst plats.
+
+#### 🔧 Funktioner
+
+- **Lämna betyg & kommentar**  
+  Betygsätt platsen (t.ex. 1–5) och skriv en kort kommentar.
+
+- **Tidsstämpling av recensioner**  
+  Varje recension sparas med datum för att visa aktuell feedback.
+
+- **Koppling till användare och plats**  
+  Recensionen länkas både till den användare som skrev den och platsen den gäller.
+
+#### 🔗 Relationer
+
+- Tillhör en `User`  
+- Tillhör en `QuietPlace`
 
 ---
 
 ### 🔖 Bookmark (Bokmärke)
-Visar att en användare har sparat en plats.
-- `user_id`: Referens till användaren
-- `quiet_place_id`: Referens till platsen
-- `created_at`: Datum då bokmärket skapades
+
+En sparad plats från en användare.
+
+#### 🔧 Funktioner
+
+- **Spara en plats som favorit**  
+  Lägg till en QuietPlace till din bokmärkeslista.
+
+- **Visa sparade platser**  
+  Lista alla bokmärkta platser på din profilsida.
+
+- **Tidsstämpling**  
+  Varje bokmärke sparas med datum då det lades till.
+
+#### 🔗 Relationer
+
+- Tillhör en `User`  
+- Refererar till en `QuietPlace`
 
 ---
 
-## 🚀 Installation & Användning
+## 🚀 Kom igång
 
-1. Klona repot:
+1. Klona projektet:
    ```bash
    git clone https://github.com/ditt-namn/quietspace.git
    cd quietspace
