@@ -34,10 +34,6 @@ Representerar en användare i systemet.
 - **Spara bokmärken**  
   Spara platser för snabb åtkomst senare.
 
-#### 🔗 Relationer
-
-- Kan skriva flera `Review`s  
-- Kan spara flera `Bookmark`s
 
 ---
 
@@ -62,10 +58,6 @@ Representerar en tyst plats i staden, t.ex. bibliotek, park eller café.
 - **Visa recensioner & bokmärken**  
   Lista alla kopplade recensioner och hur många som har bokmärkt platsen.
 
-#### 🔗 Relationer
-
-- Har många `Review`s  
-- Kan bokmärkas av många `User`s
 
 ---
 
@@ -84,11 +76,6 @@ En användares bedömning av en tyst plats.
 - **Koppling till användare och plats**  
   Recensionen länkas både till den användare som skrev den och platsen den gäller.
 
-#### 🔗 Relationer
-
-- Tillhör en `User`  
-- Tillhör en `QuietPlace`
-
 ---
 
 ### 🔖 Bookmark (Bokmärke)
@@ -105,11 +92,6 @@ En sparad plats från en användare.
 
 - **Tidsstämpling**  
   Varje bokmärke sparas med datum då det lades till.
-
-#### 🔗 Relationer
-
-- Tillhör en `User`  
-- Refererar till en `QuietPlace`
 
 ---
 
