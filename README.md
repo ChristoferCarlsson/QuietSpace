@@ -95,9 +95,3 @@ En sparad plats från en användare.
 
 ---
 
-## 🚀 Kom igång
-
-1. Klona projektet:
-   ```bash
-   git clone https://github.com/ditt-namn/quietspace.git
-   cd quietspace
