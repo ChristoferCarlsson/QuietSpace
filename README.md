@@ -94,4 +94,18 @@ En sparad plats från en användare.
   Varje bokmärke sparas med datum då det lades till.
 
 ---
+#### 🛠️ Teknikstack
 
+- Frontend: React / Next.js
+
+- Backend: Node.js / Express
+
+- Databas: PostgreSQL eller MongoDB
+
+- Kartor: Leaflet.js eller Google Maps API
+
+- Autentisering: JWT / OAuth
+
+#### 📄 Licens
+
+- **MIT License**
