@@ -11,7 +11,7 @@ namespace Domain.Entities
         public int Id { get; set; }
         public int UserId { get; set; }
         public int PlaceId { get; set; }
-        public DateTime DateAdded { get; set; }
+        public DateTime DateAdded { get; set; } = DateTime.UtcNow;
 
         public User User { get; set; } = null!;
         public QuietPlace Place { get; set; } = null!;

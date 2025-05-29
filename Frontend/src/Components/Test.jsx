@@ -7,6 +7,15 @@ import "./Test.css";
 function Test() {
   const [data, setData] = useState([]);
   const [showPlaces, setShowPlaces] = useState(false);
+  const [selectedData, setSelectedData] = useState({
+    name: "",
+    address: "",
+    latitude: 0,
+    longitude: 0,
+    category: "",
+    averageRating: 0,
+    tags: "",
+  });
 
   const [formData, setFormData] = useState({
     name: "",
@@ -38,6 +47,12 @@ function Test() {
     }));
   };
 
+  const handlePopup = (item) => {
+    setSelectedData(item);
+    setShowPlaces(!showPlaces);
+    console.log("Clicked item:", item);
+  };
+
   const createAPICall = (e) => {
     e.preventDefault();
 
@@ -62,10 +77,11 @@ function Test() {
   return (
     <div id="body">
       <div className="mainContainer">
-        {showPlaces ? <Places /> : ""}
+        {showPlaces && <Places selectedData={selectedData} />}
+
         {data.map((item, index) => (
           <div
-            onClick={() => setShowPlaces(!showPlaces)}
+            onClick={() => handlePopup(item)}
             className="subContainer"
             key={index}
           >
