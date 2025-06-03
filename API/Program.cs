@@ -18,6 +18,9 @@ namespace API
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddScoped<IQuietPlaceRepository, QuietPlaceRepository>();
+            builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IBookmarkRepository, BookmarkRepository>();
 
             builder.Services.AddControllers();
 

@@ -27,11 +27,7 @@ namespace Infrastructure.Repositories
                 Id = e.Id,
                 Name = e.Name,
                 Address = e.Address,
-                Latitude = e.Latitude,
-                Longitude = e.Longitude,
-                Category = e.Category,
-                AverageRating = e.AverageRating,
-                Tags = e.Tags
+                AverageRating = e.AverageRating
             });
         }
 
@@ -46,11 +42,7 @@ namespace Infrastructure.Repositories
                 Id = e.Id,
                 Name = e.Name,
                 Address = e.Address,
-                Latitude = e.Latitude,
-                Longitude = e.Longitude,
-                Category = e.Category,
-                AverageRating = e.AverageRating,
-                Tags = e.Tags
+                AverageRating = e.AverageRating
             };
         }
 
@@ -60,17 +52,13 @@ namespace Infrastructure.Repositories
             {
                 Name = place.Name,
                 Address = place.Address,
-                Latitude = place.Latitude,
-                Longitude = place.Longitude,
-                Category = place.Category,
-                AverageRating = place.AverageRating,
-                Tags = place.Tags
+                AverageRating = place.AverageRating
             };
 
             _context.QuietPlaces.Add(entity);
             await _context.SaveChangesAsync();
 
-            place.Id = entity.Id; // return generated ID if needed
+            place.Id = entity.Id;
         }
 
         public async Task UpdateAsync(QuietPlaceDto place)
@@ -81,11 +69,7 @@ namespace Infrastructure.Repositories
 
             entity.Name = place.Name;
             entity.Address = place.Address;
-            entity.Latitude = place.Latitude;
-            entity.Longitude = place.Longitude;
-            entity.Category = place.Category;
             entity.AverageRating = place.AverageRating;
-            entity.Tags = place.Tags;
 
             await _context.SaveChangesAsync();
         }

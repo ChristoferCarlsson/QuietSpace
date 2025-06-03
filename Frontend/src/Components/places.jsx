@@ -1,10 +1,10 @@
 import React from "react";
 import "./Test.css";
 
-function Places() {
+function Places({ selectedData }) {
   return (
     <div className="popup">
-      <h4>Location</h4>
+      <h4>{selectedData.name}</h4>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed elit velit,
         sagittis eu neque ac, venenatis eleifend risus. Proin consectetur

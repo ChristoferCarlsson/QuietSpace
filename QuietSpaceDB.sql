@@ -1,87 +1,203 @@
--- Create the database
-CREATE DATABASE QuietSpaceDB;
+USE [master]
 GO
-
--- Use the new database
-USE QuietSpaceDB;
+/****** Object:  Database [QuietSpaceDB]    Script Date: 2025-06-02 14:37:03 ******/
+CREATE DATABASE [QuietSpaceDB]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'QuietSpaceDB', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\QuietSpaceDB.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'QuietSpaceDB_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\QuietSpaceDB_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
 GO
-
--- Create the User table
-CREATE TABLE [User] (
-    Id INT PRIMARY KEY IDENTITY(1,1),
-    Name NVARCHAR(100) NOT NULL,
-    Email NVARCHAR(255) NOT NULL UNIQUE,
-    Password NVARCHAR(255) NOT NULL,
-    Preferences TEXT
-);
+ALTER DATABASE [QuietSpaceDB] SET COMPATIBILITY_LEVEL = 160
 GO
-
--- Create the QuietPlace table
-CREATE TABLE QuietPlace (
-    Id INT PRIMARY KEY IDENTITY(1,1),
-    Name NVARCHAR(100) NOT NULL,
-    Address NVARCHAR(255) NOT NULL,
-    Latitude FLOAT NOT NULL,
-    Longitude FLOAT NOT NULL,
-    Category NVARCHAR(100) NOT NULL,
-    AverageRating REAL NOT NULL,
-    Tags TEXT NOT NULL
-);
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [QuietSpaceDB].[dbo].[sp_fulltext_database] @action = 'enable'
+end
 GO
-
--- Create the Review table
-CREATE TABLE Review (
-    Id INT PRIMARY KEY IDENTITY(1,1),
-    UserId INT NOT NULL,
-    PlaceId INT NOT NULL,
-    Rating INT NOT NULL CHECK (Rating >= 1 AND Rating <= 5),
-    Comment NVARCHAR(1000) NOT NULL,
-    Date DATETIME NOT NULL,
-    FOREIGN KEY (UserId) REFERENCES [User](Id),
-    FOREIGN KEY (PlaceId) REFERENCES QuietPlace(Id)
-);
+ALTER DATABASE [QuietSpaceDB] SET ANSI_NULL_DEFAULT OFF 
 GO
-
--- Create the Bookmark table
-CREATE TABLE Bookmark (
-    Id INT PRIMARY KEY IDENTITY(1,1),
-    UserId INT NOT NULL,
-    PlaceId INT NOT NULL,
-    DateAdded DATETIME NOT NULL,
-    FOREIGN KEY (UserId) REFERENCES [User](Id),
-    FOREIGN KEY (PlaceId) REFERENCES QuietPlace(Id)
-);
+ALTER DATABASE [QuietSpaceDB] SET ANSI_NULLS OFF 
 GO
-
--- Insert Users
-INSERT INTO [User] (Name, Email, Password, Preferences)
-VALUES
-('Alice Smith', 'alice@example.com', 'password123', 'Nature, Silence'),
-('Bob Johnson', 'bob@example.com', 'securePass!', 'Water sounds, Dim light'),
-('Carol Lee', 'carol@example.com', 'carolPW!', 'Minimalism, Indoor plants');
+ALTER DATABASE [QuietSpaceDB] SET ANSI_PADDING OFF 
 GO
-
--- Insert QuietPlaces
-INSERT INTO QuietPlace (Name, Address, Latitude, Longitude, Category, AverageRating, Tags)
-VALUES
-('Zen Garden', '123 Peace St, Tranquil Town', 37.7749, -122.4194, 'Garden', 4.8, 'zen, green, peaceful'),
-('Silent Library', '456 Calm Ave, Still City', 40.7128, -74.0060, 'Library', 4.5, 'books, study, silence'),
-('Mountain Retreat', '789 Solitude Rd, Remote Hills', 39.7392, -104.9903, 'Retreat', 4.9, 'mountains, isolation, fresh air');
+ALTER DATABASE [QuietSpaceDB] SET ANSI_WARNINGS OFF 
 GO
-
--- Insert Reviews
-INSERT INTO Review (UserId, PlaceId, Rating, Comment, Date)
-VALUES
-(1, 1, 5, 'Absolutely serene and beautiful.', '2024-11-01'),
-(2, 2, 4, 'Great place to read in peace.', '2024-11-05'),
-(3, 3, 5, 'Perfect getaway from the city.', '2024-12-15'),
-(1, 2, 4, 'Loved the atmosphere, but a bit crowded.', '2025-01-10');
+ALTER DATABASE [QuietSpaceDB] SET ARITHABORT OFF 
 GO
-
--- Insert Bookmarks
-INSERT INTO Bookmark (UserId, PlaceId, DateAdded)
-VALUES
-(1, 3, '2025-01-12'),
-(2, 1, '2025-01-15'),
-(3, 2, '2025-01-20');
+ALTER DATABASE [QuietSpaceDB] SET AUTO_CLOSE ON 
+GO
+ALTER DATABASE [QuietSpaceDB] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [QuietSpaceDB] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [QuietSpaceDB] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [QuietSpaceDB] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [QuietSpaceDB] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [QuietSpaceDB] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [QuietSpaceDB] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [QuietSpaceDB] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [QuietSpaceDB] SET  ENABLE_BROKER 
+GO
+ALTER DATABASE [QuietSpaceDB] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [QuietSpaceDB] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [QuietSpaceDB] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [QuietSpaceDB] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [QuietSpaceDB] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [QuietSpaceDB] SET READ_COMMITTED_SNAPSHOT ON 
+GO
+ALTER DATABASE [QuietSpaceDB] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [QuietSpaceDB] SET RECOVERY SIMPLE 
+GO
+ALTER DATABASE [QuietSpaceDB] SET  MULTI_USER 
+GO
+ALTER DATABASE [QuietSpaceDB] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [QuietSpaceDB] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [QuietSpaceDB] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [QuietSpaceDB] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [QuietSpaceDB] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [QuietSpaceDB] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+ALTER DATABASE [QuietSpaceDB] SET QUERY_STORE = ON
+GO
+ALTER DATABASE [QuietSpaceDB] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30), DATA_FLUSH_INTERVAL_SECONDS = 900, INTERVAL_LENGTH_MINUTES = 60, MAX_STORAGE_SIZE_MB = 1000, QUERY_CAPTURE_MODE = AUTO, SIZE_BASED_CLEANUP_MODE = AUTO, MAX_PLANS_PER_QUERY = 200, WAIT_STATS_CAPTURE_MODE = ON)
+GO
+USE [QuietSpaceDB]
+GO
+/****** Object:  Table [dbo].[Bookmark]    Script Date: 2025-06-02 14:37:03 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Bookmark](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[UserId] [int] NOT NULL,
+	[PlaceId] [int] NOT NULL,
+	[DateAdded] [datetime2](7) NOT NULL,
+ CONSTRAINT [PK_Bookmark] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[QuietPlace]    Script Date: 2025-06-02 14:37:03 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[QuietPlace](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](max) NOT NULL,
+	[Address] [nvarchar](max) NOT NULL,
+	[AverageRating] [real] NULL,
+ CONSTRAINT [PK_QuietPlace] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Review]    Script Date: 2025-06-02 14:37:03 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Review](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[UserId] [int] NOT NULL,
+	[PlaceId] [int] NOT NULL,
+	[Rating] [int] NOT NULL,
+	[Comment] [nvarchar](max) NULL,
+	[Date] [datetime2](7) NOT NULL,
+ CONSTRAINT [PK_Review] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[User]    Script Date: 2025-06-02 14:37:03 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[User](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](100) NOT NULL,
+	[Email] [nvarchar](255) NOT NULL,
+	[Password] [nvarchar](max) NOT NULL,
+ CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+/****** Object:  Index [IX_Bookmark_PlaceId]    Script Date: 2025-06-02 14:37:03 ******/
+CREATE NONCLUSTERED INDEX [IX_Bookmark_PlaceId] ON [dbo].[Bookmark]
+(
+	[PlaceId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_Bookmark_UserId_PlaceId]    Script Date: 2025-06-02 14:37:03 ******/
+CREATE UNIQUE NONCLUSTERED INDEX [IX_Bookmark_UserId_PlaceId] ON [dbo].[Bookmark]
+(
+	[UserId] ASC,
+	[PlaceId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_Review_PlaceId]    Script Date: 2025-06-02 14:37:03 ******/
+CREATE NONCLUSTERED INDEX [IX_Review_PlaceId] ON [dbo].[Review]
+(
+	[PlaceId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+/****** Object:  Index [IX_Review_UserId]    Script Date: 2025-06-02 14:37:03 ******/
+CREATE NONCLUSTERED INDEX [IX_Review_UserId] ON [dbo].[Review]
+(
+	[UserId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Bookmark]  WITH CHECK ADD  CONSTRAINT [FK_Bookmark_QuietPlace_PlaceId] FOREIGN KEY([PlaceId])
+REFERENCES [dbo].[QuietPlace] ([Id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[Bookmark] CHECK CONSTRAINT [FK_Bookmark_QuietPlace_PlaceId]
+GO
+ALTER TABLE [dbo].[Bookmark]  WITH CHECK ADD  CONSTRAINT [FK_Bookmark_User_UserId] FOREIGN KEY([UserId])
+REFERENCES [dbo].[User] ([Id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[Bookmark] CHECK CONSTRAINT [FK_Bookmark_User_UserId]
+GO
+ALTER TABLE [dbo].[Review]  WITH CHECK ADD  CONSTRAINT [FK_Review_QuietPlace_PlaceId] FOREIGN KEY([PlaceId])
+REFERENCES [dbo].[QuietPlace] ([Id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[Review] CHECK CONSTRAINT [FK_Review_QuietPlace_PlaceId]
+GO
+ALTER TABLE [dbo].[Review]  WITH CHECK ADD  CONSTRAINT [FK_Review_User_UserId] FOREIGN KEY([UserId])
+REFERENCES [dbo].[User] ([Id])
+ON DELETE CASCADE
+GO
+ALTER TABLE [dbo].[Review] CHECK CONSTRAINT [FK_Review_User_UserId]
+GO
+USE [master]
+GO
+ALTER DATABASE [QuietSpaceDB] SET  READ_WRITE 
 GO

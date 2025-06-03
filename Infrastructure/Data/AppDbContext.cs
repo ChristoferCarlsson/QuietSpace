@@ -21,17 +21,6 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Review>().ToTable("Review");
         modelBuilder.Entity<Bookmark>().ToTable("Bookmark");
 
-
-        //Configure QuietPlace
-        modelBuilder.Entity<QuietPlace>()
-            .Property(qp => qp.Tags)
-            .HasColumnType("text");
-
-        //Configure User
-        modelBuilder.Entity<User>()
-            .Property(u => u.Preferences)
-            .HasColumnType("text");
-
         //Configure Review
         modelBuilder.Entity<Review>()
             .HasOne(r => r.User)
@@ -53,5 +42,9 @@ public class AppDbContext : DbContext
             .HasOne(b => b.Place)
             .WithMany(qp => qp.Bookmarks)
             .HasForeignKey(b => b.PlaceId);
+
+        modelBuilder.Entity<Bookmark>()
+    .HasIndex(b => new { b.UserId, b.PlaceId })
+    .IsUnique();
     }
 }
