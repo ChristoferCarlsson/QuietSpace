@@ -140,6 +140,25 @@ button {
   margin-bottom: 1rem;
 }
 
+.place-popup {
+  background-color: #393939;
+  border: 2px solid black;
+  /* position: absolute; */
+  margin: 10px;
+  padding: 10px;
+}
+
+.remove-button {
+  background-color: #b84343;
+  color: white;
+  cursor: pointer;
+  width: 40px;
+}
+
+.remove-button :hover {
+  background-color: #ff4c4c;
+}
+
 .auth-form {
   display: flex;
   flex-direction: column;

@@ -2,8 +2,37 @@ import React from "react";
 import "./Test.css"; // Optional, reuse styling
 import "./style.css";
 
-function QuietPlaceCard({ item, onClick }) {
-  console.log(item.latestReviewComment);
+import axios from "axios";
+
+function QuietPlaceCard({ item, onClick, onDelete }) {
+  const handleDelete = async (e) => {
+    e.stopPropagation(); // prevent triggering onClick
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("You must be logged in to delete a QuietPlace.");
+      return;
+    }
+
+    if (!window.confirm("Are you sure you want to delete this QuietPlace?"))
+      return;
+
+    try {
+      await axios.delete(`https://localhost:7220/api/QuietPlace/${item.id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (onDelete) {
+        onDelete(); // Refresh the list from parent
+      }
+    } catch (error) {
+      console.error("Error deleting QuietPlace:", error);
+      alert("Failed to delete QuietPlace.");
+    }
+  };
+
   return (
     <div className="placeEntry" onClick={onClick}>
       <h4>{item.name}</h4>
@@ -14,15 +43,17 @@ function QuietPlaceCard({ item, onClick }) {
           ? item.averageRating.toFixed(1)
           : "No reviews yet"}
       </p>
-      {item.latestReviewComment ? (
+      {item.latestReviewComment && (
         <>
-          <p style={{ fontStyle: "italic" }}>"{item.latestReviewComment}"</p>
-          <p>Rating: {item.latestReviewRating}/5</p>
-          {item.latestReviewUserName && <p>— {item.latestReviewUserName}</p>}
+          <p>
+            <em>"{item.latestReviewComment}"</em>
+          </p>
+          <p>– {item.latestReviewRating}/5</p>
         </>
-      ) : (
-        <p>No reviews with comments yet.</p>
       )}
+      <button className="removeBtn" onClick={handleDelete}>
+        X
+      </button>
     </div>
   );
 }
