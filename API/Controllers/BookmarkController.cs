@@ -1,5 +1,6 @@
 ﻿using Application.DTOs;
 using Application.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -39,6 +40,7 @@ namespace API.Controllers
             return Ok(bookmarks);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> Create(BookmarkDto bookmark)
         {
@@ -46,6 +48,7 @@ namespace API.Controllers
             return CreatedAtAction(nameof(GetById), new { id = bookmark.Id }, bookmark);
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id, BookmarkDto bookmark)
         {
@@ -54,6 +57,7 @@ namespace API.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {

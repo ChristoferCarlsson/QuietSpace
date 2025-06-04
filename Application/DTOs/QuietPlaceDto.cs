@@ -6,6 +6,10 @@ public class QuietPlaceDto
     public string Name { get; set; }
     public string Address { get; set; }
     public float? AverageRating { get; set; }
+
+    public string? LatestReviewComment { get; set; }
+    public int? LatestReviewRating { get; set; }
+    public string? LatestReviewerName { get; set; }
 }
 
 

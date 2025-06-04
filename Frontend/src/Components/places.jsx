@@ -1,20 +1,88 @@
-import React from "react";
-import "./Test.css";
+import React, { useState } from "react";
+import axios from "axios";
 
-function Places({ selectedData }) {
+function Places({ selectedData, onReviewAdded }) {
+  const [reviewData, setReviewData] = useState({ rating: "", comment: "" });
+  const [message, setMessage] = useState("");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setReviewData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      setMessage("You must be logged in to submit a review.");
+      return;
+    }
+
+    try {
+      await axios.post(
+        "https://localhost:7220/api/Review",
+        {
+          placeId: selectedData.id,
+          rating: parseInt(reviewData.rating),
+          comment: reviewData.comment,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      setMessage("Review submitted successfully!");
+      setReviewData({ rating: "", comment: "" });
+
+      // 👇 Refresh the QuietPlaces data in parent
+      if (onReviewAdded) {
+        onReviewAdded();
+      }
+    } catch (error) {
+      console.error("Error submitting review: here it is", error);
+      const errorMsg =
+        error.response?.data?.message || error.response?.data || error.message;
+      setMessage("Review failed: " + errorMsg);
+    }
+  };
+
   return (
-    <div className="popup">
-      <h4>{selectedData.name}</h4>
+    <div className="place-popup">
+      <h3>{selectedData.name}</h3>
+      <p>{selectedData.address}</p>
       <p>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed elit velit,
-        sagittis eu neque ac, venenatis eleifend risus. Proin consectetur
-        blandit tortor. Nam varius id tortor mollis ullamcorper. Phasellus a
-        fringilla diam. Proin in rutrum nisl. Mauris sem neque, blandit in diam
-        eget, hendrerit ullamcorper lectus. Cras non odio eu mi sodales varius
-        sed vitae turpis. Donec a condimentum mauris. Suspendisse arcu nulla,
-        tempor id feugiat ac, ultricies ac mauris. Vestibulum ante ipsum primis
-        in faucibus orci luctus et ultrices posuere cubilia curae;
+        Average Rating:{" "}
+        {selectedData.averageRating === 0
+          ? "No reviews yet"
+          : selectedData.averageRating.toFixed(1)}
       </p>
+
+      <form onSubmit={handleReviewSubmit}>
+        <h4>Leave a Review</h4>
+        <input
+          type="number"
+          name="rating"
+          min="1"
+          max="5"
+          value={reviewData.rating}
+          onChange={handleChange}
+          placeholder="Rating (1–5)"
+          required
+        />
+        <textarea
+          name="comment"
+          value={reviewData.comment}
+          onChange={handleChange}
+          placeholder="Write your thoughts..."
+          required
+        />
+        <button type="submit">Submit Review</button>
+      </form>
+
+      {message && <p style={{ color: "green" }}>{message}</p>}
     </div>
   );
 }

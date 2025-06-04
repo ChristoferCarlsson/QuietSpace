@@ -1,5 +1,6 @@
 ﻿using Application.DTOs;
 using Application.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IEnumerable<QuietPlaceDto>> GetAll()
         {
-            return await _quietPlaceRepository.GetAllAsync();
+            return await _quietPlaceRepository.GetAllQuietPlacesAsync();
         }
 
         [HttpGet("{id}")]
@@ -32,6 +33,7 @@ namespace API.Controllers
             return place;
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult> Add(QuietPlaceDto place)
         {

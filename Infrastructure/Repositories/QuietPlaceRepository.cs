@@ -83,5 +83,42 @@ namespace Infrastructure.Repositories
             _context.QuietPlaces.Remove(entity);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<List<QuietPlaceDto>> GetAllQuietPlacesAsync()
+        {
+            return await _context.QuietPlaces
+                .Include(p => p.Reviews)
+                    .ThenInclude(r => r.User)
+                .Select(p => new QuietPlaceDto
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Address = p.Address,
+                    AverageRating = p.Reviews.Any()
+                        ? (float?)p.Reviews.Average(r => r.Rating)
+                        : null,
+
+                    LatestReviewComment = p.Reviews
+                        .Where(r => !string.IsNullOrEmpty(r.Comment))
+                        .OrderByDescending(r => r.Date)
+                        .Select(r => r.Comment)
+                        .FirstOrDefault(),
+
+                    LatestReviewRating = p.Reviews
+                        .Where(r => !string.IsNullOrEmpty(r.Comment))
+                        .OrderByDescending(r => r.Date)
+                        .Select(r => r.Rating)
+                        .FirstOrDefault(),
+
+                    LatestReviewerName = p.Reviews
+                        .Where(r => !string.IsNullOrEmpty(r.Comment))
+                        .OrderByDescending(r => r.Date)
+                        .Select(r => r.User.Name)
+                        .FirstOrDefault()
+                })
+                .ToListAsync();
+        }
+
+
     }
 }
