@@ -1,28 +1,25 @@
-// QuietPlaceCard.jsx
 import React from "react";
+import "./Test.css"; // Optional, reuse styling
+import "./style.css";
 
-function QuietPlaceCard({ place, onClick }) {
+function QuietPlaceCard({ item, onClick }) {
+  console.log(item.latestReviewComment);
   return (
-    <div className="subContainer" onClick={() => onClick(place)}>
-      <h4>{place.name}</h4>
-      <p>{place.address}</p>
+    <div className="placeEntry" onClick={onClick}>
+      <h4>{item.name}</h4>
+      <p>{item.address}</p>
       <p>
         Average Rating:{" "}
-        {place.averageRating != null && place.averageRating > 0
-          ? place.averageRating.toFixed(1)
+        {item.averageRating != null && item.averageRating > 0
+          ? item.averageRating.toFixed(1)
           : "No reviews yet"}
       </p>
-
-      {place.latestReviewComment ? (
-        <div className="latest-review">
-          <p>
-            <em>"{place.latestReviewComment}"</em>
-          </p>
-          <p>
-            — {place.latestReviewerName ?? "Anonymous"}, Rating:{" "}
-            {place.latestReviewRating}
-          </p>
-        </div>
+      {item.latestReviewComment ? (
+        <>
+          <p style={{ fontStyle: "italic" }}>"{item.latestReviewComment}"</p>
+          <p>Rating: {item.latestReviewRating}/5</p>
+          {item.latestReviewUserName && <p>— {item.latestReviewUserName}</p>}
+        </>
       ) : (
         <p>No reviews with comments yet.</p>
       )}

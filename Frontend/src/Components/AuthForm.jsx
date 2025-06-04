@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 
+import "./style.css";
+
 function AuthForm() {
   const [isRegistering, setIsRegistering] = useState(false);
   const [formData, setFormData] = useState({
@@ -63,6 +65,7 @@ function AuthForm() {
 
   return (
     <div className="auth-form">
+      <h1>Quiet Space</h1>
       <h2>{isRegistering ? "Register" : "Login"}</h2>
       <form onSubmit={handleSubmit}>
         {isRegistering && (

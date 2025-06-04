@@ -55,9 +55,9 @@ function Places({ selectedData, onReviewAdded }) {
       <p>{selectedData.address}</p>
       <p>
         Average Rating:{" "}
-        {selectedData.averageRating === 0
-          ? "No reviews yet"
-          : selectedData.averageRating.toFixed(1)}
+        {selectedData.averageRating != null
+          ? selectedData.averageRating.toFixed(1)
+          : "No reviews yet"}
       </p>
 
       <form onSubmit={handleReviewSubmit}>

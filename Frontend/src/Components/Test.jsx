@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
-import QuietPlaceCard from "./QuietPlaceCard";
 import Places from "./places";
-
+import QuietPlaceCard from "./QuietPlaceCard"; // New component
 import "./Test.css";
 
 function Test() {
@@ -16,7 +14,6 @@ function Test() {
     address: "",
   });
 
-  // Fetch QuietPlaces from API
   const refreshPlaces = () => {
     axios
       .get("https://localhost:7220/api/QuietPlace")
@@ -43,7 +40,6 @@ function Test() {
   const handlePopup = (item) => {
     setSelectedData(item);
     setShowPlaces(true);
-    console.log("Clicked item:", item);
   };
 
   const createAPICall = (e) => {
@@ -79,8 +75,12 @@ function Test() {
           <Places selectedData={selectedData} onReviewAdded={refreshPlaces} />
         )}
 
-        {data.map((item) => (
-          <QuietPlaceCard key={item.id} place={item} onClick={handlePopup} />
+        {data.map((item, index) => (
+          <QuietPlaceCard
+            key={index}
+            item={item}
+            onClick={() => handlePopup(item)}
+          />
         ))}
 
         <form onSubmit={createAPICall}>
