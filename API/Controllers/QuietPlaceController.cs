@@ -33,6 +33,14 @@ namespace API.Controllers
             return place;
         }
 
+        [HttpGet("multiple")]
+        public async Task<ActionResult<IEnumerable<QuietPlaceDto>>> GetMultiple([FromQuery] int[] ids)
+        {
+            var places = await _quietPlaceRepository.GetByIdsAsync(ids);
+            return Ok(places);
+        }
+
+
         [Authorize]
         [HttpPost]
         public async Task<ActionResult> Add(QuietPlaceDto place)

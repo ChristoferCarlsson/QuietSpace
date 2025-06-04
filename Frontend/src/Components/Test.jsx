@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-import Places from "./places";
 import QuietPlaceCard from "./QuietPlaceCard";
+import Places from "./places";
+
 import "./Test.css";
 
 function Test() {
@@ -20,7 +21,6 @@ function Test() {
     axios
       .get("https://localhost:7220/api/QuietPlace")
       .then((response) => {
-        console.log("Fetched quiet places:", response.data); // Check this in browser console
         setData(response.data);
       })
       .catch((error) => {

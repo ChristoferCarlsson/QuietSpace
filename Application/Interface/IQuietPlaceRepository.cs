@@ -13,5 +13,8 @@ namespace Application.Interface
         Task DeleteAsync(int id);
         Task<List<QuietPlaceDto>> GetAllQuietPlacesAsync();
 
+        Task<List<QuietPlaceDto>> GetByIdsAsync(int[] ids);
+
+
     }
 }

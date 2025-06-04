@@ -1,23 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
 function AuthForm() {
   const [isRegistering, setIsRegistering] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
   });
   const [message, setMessage] = useState("");
-
-  // Check for token on load
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      setIsLoggedIn(true);
-    }
-  }, []);
 
   const toggleMode = () => {
     setIsRegistering((prev) => !prev);
@@ -58,7 +49,6 @@ function AuthForm() {
       if (!isRegistering) {
         const token = response.data.token;
         localStorage.setItem("token", token);
-        setIsLoggedIn(true);
         setMessage("Login successful!");
       } else {
         setMessage("Registration successful! You can now log in.");
@@ -70,23 +60,6 @@ function AuthForm() {
       setMessage("Something went wrong: " + errorMsg);
     }
   };
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    setIsLoggedIn(false);
-    setMessage("Logged out successfully.");
-  };
-
-  // ✅ Return early if logged in
-  if (isLoggedIn) {
-    return (
-      <div className="auth-form">
-        <p>You are logged in.</p>
-        <button onClick={handleLogout}>Logout</button>
-        <p style={{ color: "green" }}>{message}</p>
-      </div>
-    );
-  }
 
   return (
     <div className="auth-form">

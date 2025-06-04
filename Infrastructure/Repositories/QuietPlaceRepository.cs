@@ -119,6 +119,31 @@ namespace Infrastructure.Repositories
                 .ToListAsync();
         }
 
+        public async Task<List<QuietPlaceDto>> GetByIdsAsync(int[] ids)
+        {
+            return await _context.QuietPlaces
+                .Where(p => ids.Contains(p.Id))
+                .Include(p => p.Reviews)
+                .Select(p => new QuietPlaceDto
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                    Address = p.Address,
+                    AverageRating = p.Reviews.Any() ? (float?)p.Reviews.Average(r => r.Rating) : null,
+                    LatestReviewComment = p.Reviews
+                        .Where(r => !string.IsNullOrEmpty(r.Comment))
+                        .OrderByDescending(r => r.Date)
+                        .Select(r => r.Comment)
+                        .FirstOrDefault(),
+                    LatestReviewRating = p.Reviews
+                        .Where(r => !string.IsNullOrEmpty(r.Comment))
+                        .OrderByDescending(r => r.Date)
+                        .Select(r => r.Rating)
+                        .FirstOrDefault()
+                })
+                .ToListAsync();
+        }
+
 
     }
 }

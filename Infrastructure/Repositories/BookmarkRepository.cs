@@ -44,20 +44,29 @@ namespace Infrastructure.Repositories
             };
         }
 
-        public async Task AddAsync(BookmarkDto bookmarkDto)
+        public async Task AddAsync(int userId, BookmarkDto bookmarkDto)
         {
-            var entity = new Bookmark
+            try
             {
-                UserId = bookmarkDto.UserId,
-                PlaceId = bookmarkDto.PlaceId,
-                DateAdded = bookmarkDto.DateAdded
-            };
+                var entity = new Bookmark
+                {
+                    UserId = userId,
+                    PlaceId = bookmarkDto.PlaceId,
+                    DateAdded = bookmarkDto.DateAdded
+                };
 
-            _context.Bookmarks.Add(entity);
-            await _context.SaveChangesAsync();
+                _context.Bookmarks.Add(entity);
+                await _context.SaveChangesAsync();
 
-            bookmarkDto.Id = entity.Id; // update ID
+                bookmarkDto.Id = entity.Id;
+            }
+            catch (DbUpdateException dbEx)
+            {
+                var innerMessage = dbEx.InnerException?.Message ?? dbEx.Message;
+                throw new Exception($"Error saving bookmark: {innerMessage}", dbEx);
+            }
         }
+
 
         public async Task UpdateAsync(BookmarkDto bookmarkDto)
         {
@@ -95,5 +104,6 @@ namespace Infrastructure.Repositories
                 DateAdded = b.DateAdded
             });
         }
+
     }
 }
