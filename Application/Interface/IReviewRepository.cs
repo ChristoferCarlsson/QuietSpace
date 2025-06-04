@@ -12,6 +12,13 @@ namespace Application.Interface
         Task UpdateAsync(ReviewDto review);
         Task DeleteAsync(int id);
 
+        Task UpdateAverageRatingAsync(int placeId);
+        Task AddReviewAndUpdateAverageAsync(ReviewDto reviewDto);
+
+        Task<IEnumerable<ReviewDto>> GetByPlaceIdAsync(int placeId);
+
         Task<ReviewDto> GetByUserAndPlaceAsync(int userId, int placeId);  // To enforce one review per user per place
+
+
     }
 }

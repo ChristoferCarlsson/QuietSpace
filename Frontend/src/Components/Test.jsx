@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+
+import QuietPlaceCard from "./QuietPlaceCard";
 import Places from "./places";
 
 import "./Test.css";
@@ -7,27 +9,15 @@ import "./Test.css";
 function Test() {
   const [data, setData] = useState([]);
   const [showPlaces, setShowPlaces] = useState(false);
-  const [selectedData, setSelectedData] = useState({
-    name: "",
-    address: "",
-    latitude: 0,
-    longitude: 0,
-    category: "",
-    averageRating: 0,
-    tags: "",
-  });
+  const [selectedData, setSelectedData] = useState(null);
 
   const [formData, setFormData] = useState({
     name: "",
     address: "",
-    latitude: 0,
-    longitude: 0,
-    category: "",
-    averageRating: 0,
-    tags: "",
   });
 
-  useEffect(() => {
+  // Fetch QuietPlaces from API
+  const refreshPlaces = () => {
     axios
       .get("https://localhost:7220/api/QuietPlace")
       .then((response) => {
@@ -36,11 +26,14 @@ function Test() {
       .catch((error) => {
         console.error("Error fetching data:", error);
       });
+  };
+
+  useEffect(() => {
+    refreshPlaces();
   }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -49,45 +42,45 @@ function Test() {
 
   const handlePopup = (item) => {
     setSelectedData(item);
-    setShowPlaces(!showPlaces);
+    setShowPlaces(true);
     console.log("Clicked item:", item);
   };
 
   const createAPICall = (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("token");
 
-    const payload = {
-      ...formData,
-      latitude: parseFloat(formData.latitude),
-      longitude: parseFloat(formData.longitude),
-      averageRating: parseFloat(formData.averageRating),
-    };
+    if (!token) {
+      alert("You must be logged in to create a QuietPlace.");
+      return;
+    }
 
     axios
-      .post("https://localhost:7220/api/QuietPlace", payload)
+      .post("https://localhost:7220/api/QuietPlace", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => {
         console.log("Post successful:", response.data);
-        setData((prevData) => [...prevData, response.data]);
+        refreshPlaces();
+        setFormData({ name: "", address: "" });
       })
       .catch((error) => {
         console.error("Error posting data:", error);
+        alert("Error posting data: " + (error.response?.data || error.message));
       });
   };
 
   return (
     <div id="body">
       <div className="mainContainer">
-        {showPlaces && <Places selectedData={selectedData} />}
+        {showPlaces && selectedData && (
+          <Places selectedData={selectedData} onReviewAdded={refreshPlaces} />
+        )}
 
-        {data.map((item, index) => (
-          <div
-            onClick={() => handlePopup(item)}
-            className="subContainer"
-            key={index}
-          >
-            <h4>{item.name}</h4>
-            <p>{item.address}</p>
-          </div>
+        {data.map((item) => (
+          <QuietPlaceCard key={item.id} place={item} onClick={handlePopup} />
         ))}
 
         <form onSubmit={createAPICall}>
@@ -99,6 +92,7 @@ function Test() {
             value={formData.name}
             onChange={handleInputChange}
             placeholder="Name"
+            required
           />
           <input
             type="text"
@@ -106,41 +100,7 @@ function Test() {
             value={formData.address}
             onChange={handleInputChange}
             placeholder="Address"
-          />
-          <input
-            type="number"
-            name="latitude"
-            value={formData.latitude}
-            onChange={handleInputChange}
-            placeholder="Latitude"
-          />
-          <input
-            type="number"
-            name="longitude"
-            value={formData.longitude}
-            onChange={handleInputChange}
-            placeholder="Longitude"
-          />
-          <input
-            type="text"
-            name="category"
-            value={formData.category}
-            onChange={handleInputChange}
-            placeholder="Category"
-          />
-          <input
-            type="number"
-            name="averageRating"
-            value={formData.averageRating}
-            onChange={handleInputChange}
-            placeholder="Average Rating"
-          />
-          <input
-            type="text"
-            name="tags"
-            value={formData.tags}
-            onChange={handleInputChange}
-            placeholder="Tags"
+            required
           />
 
           <button type="submit">Create new location</button>

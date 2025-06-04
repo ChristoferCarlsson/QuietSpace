@@ -11,5 +11,10 @@ namespace Application.Interface
         Task AddAsync(QuietPlaceDto place);
         Task UpdateAsync(QuietPlaceDto place);
         Task DeleteAsync(int id);
+        Task<List<QuietPlaceDto>> GetAllQuietPlacesAsync();
+
+        Task<List<QuietPlaceDto>> GetByIdsAsync(int[] ids);
+
+
     }
 }

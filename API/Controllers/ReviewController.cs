@@ -34,21 +34,31 @@ namespace API.Controllers
             return Ok(review);
         }
 
+        [HttpGet("place/{placeId}")]
+        public async Task<ActionResult<IEnumerable<ReviewDto>>> GetByPlaceId(int placeId)
+        {
+            var reviews = await _reviewRepository.GetByPlaceIdAsync(placeId);
+            if (reviews == null || !reviews.Any())
+                return NotFound($"No reviews found for place with ID {placeId}.");
+            return Ok(reviews);
+        }
+
+
         [Authorize]
         [HttpPost]
         public async Task<ActionResult> Create(ReviewDto reviewDto)
         {
-            // Get user ID from JWT
             var userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (string.IsNullOrEmpty(userIdString)) return Unauthorized();
             reviewDto.UserId = int.Parse(userIdString);
 
-            // Optional: Check if user already reviewed this place
             var existingReview = await _reviewRepository.GetByUserAndPlaceAsync(reviewDto.UserId, reviewDto.PlaceId);
             if (existingReview != null)
                 return Conflict("User has already reviewed this place.");
 
-            await _reviewRepository.AddAsync(reviewDto);
+            // Use AddReviewAndUpdateAverageAsync to add and update average in one atomic call
+            await _reviewRepository.AddReviewAndUpdateAverageAsync(reviewDto);
+
             return CreatedAtAction(nameof(GetById), new { id = reviewDto.Id }, reviewDto);
         }
 
@@ -68,6 +78,9 @@ namespace API.Controllers
 
             reviewDto.UserId = userId;
             await _reviewRepository.UpdateAsync(reviewDto);
+            // After updating, recalculate average rating for the place
+            await _reviewRepository.UpdateAverageRatingAsync(reviewDto.PlaceId);
+
             return NoContent();
         }
 
@@ -84,6 +97,9 @@ namespace API.Controllers
                 return Forbid("You can only delete your own review.");
 
             await _reviewRepository.DeleteAsync(id);
+            // After deletion, recalculate average rating for the place
+            await _reviewRepository.UpdateAverageRatingAsync(existingReview.PlaceId);
+
             return NoContent();
         }
     }

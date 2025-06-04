@@ -8,7 +8,8 @@ namespace Application.Interface
     {
         Task<IEnumerable<BookmarkDto>> GetAllAsync();
         Task<BookmarkDto> GetByIdAsync(int id);
-        Task AddAsync(BookmarkDto bookmark);
+        Task AddAsync(int userId, BookmarkDto bookmarkDto);
+
         Task UpdateAsync(BookmarkDto bookmark);
         Task DeleteAsync(int id);
 
