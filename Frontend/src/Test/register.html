@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Registrera dig</title>
+    <link rel="stylesheet" href="auth.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h2>Registrera dig</h2>
+      <input type="text" id="email" placeholder="Email" />
+      <input type="password" id="password" placeholder="Lösenord" />
+      <button onclick="register()">Skapa konto</button>
+      <div class="link">
+        Har du ett konto? <a href="login.html">Logga in</a>
+      </div>
+    </div>
+
+    <script>
+      function register() {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        if (!email || !password) return alert("Fyll i alla fält!");
+        localStorage.setItem("user", JSON.stringify({ email, password }));
+        alert("Konto skapat!");
+        window.location.href = "login.html";
+      }
+    </script>
+  </body>
+</html>

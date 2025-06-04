@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
-import QuietPlaceCard from "./QuietPlaceCard";
 import Places from "./places";
-
+import QuietPlaceCard from "./QuietPlaceCard";
 import "./Test.css";
 
 function Test() {
@@ -16,7 +14,6 @@ function Test() {
     address: "",
   });
 
-  // Fetch QuietPlaces from API
   const refreshPlaces = () => {
     axios
       .get("https://localhost:7220/api/QuietPlace")
@@ -43,7 +40,6 @@ function Test() {
   const handlePopup = (item) => {
     setSelectedData(item);
     setShowPlaces(true);
-    console.log("Clicked item:", item);
   };
 
   const createAPICall = (e) => {
@@ -62,13 +58,39 @@ function Test() {
         },
       })
       .then((response) => {
-        console.log("Post successful:", response.data);
         refreshPlaces();
         setFormData({ name: "", address: "" });
       })
       .catch((error) => {
         console.error("Error posting data:", error);
         alert("Error posting data: " + (error.response?.data || error.message));
+      });
+  };
+
+  const handleDelete = (id) => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      alert("You must be logged in to delete a QuietPlace.");
+      return;
+    }
+
+    axios
+      .delete(`https://localhost:7220/api/QuietPlace/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then(() => {
+        refreshPlaces(); // 👈 updates immediately
+        if (selectedData?.id === id) {
+          setShowPlaces(false);
+          setSelectedData(null);
+        }
+      })
+      .catch((error) => {
+        console.error("Error deleting QuietPlace:", error);
+        alert("Error deleting: " + (error.response?.data || error.message));
       });
   };
 
@@ -79,13 +101,17 @@ function Test() {
           <Places selectedData={selectedData} onReviewAdded={refreshPlaces} />
         )}
 
-        {data.map((item) => (
-          <QuietPlaceCard key={item.id} place={item} onClick={handlePopup} />
+        {data.map((item, index) => (
+          <QuietPlaceCard
+            key={index}
+            item={item}
+            onClick={() => handlePopup(item)}
+            onDelete={() => handleDelete(item.id)}
+          />
         ))}
 
         <form onSubmit={createAPICall}>
           <h4>Add New Location</h4>
-
           <input
             type="text"
             name="name"
@@ -102,7 +128,6 @@ function Test() {
             placeholder="Address"
             required
           />
-
           <button type="submit">Create new location</button>
         </form>
       </div>

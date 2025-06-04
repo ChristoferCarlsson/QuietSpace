@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <title>QuietSpace</title>
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="script.js"></script>
+
+    <!-- Inline CSS placed in <style> block inside <head> -->
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+        background-image: url("https://i.etsystatic.com/43193076/r/il/74334f/4878386344/il_fullxfull.4878386344_j31z.jpg"); /* example image */
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 100vh;
+        color: white;
+        text-align: center;
+      }
+
+      .overlay {
+        background-color: rgba(0, 0, 0, 0.5);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+      }
+
+      p {
+        font-size: 1.2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <!--Top-right login/register/logout buttons -->
+    <div
+      id="authButtons"
+      style="position: fixed; top: 20px; right: 20px; z-index: 999"
+    >
+      <a
+        href="login.html"
+        id="loginLink"
+        style="margin-right: 10px; color: white; text-decoration: underline"
+        >Logga in</a
+      >
+      <a
+        href="register.html"
+        id="registerLink"
+        style="color: white; text-decoration: underline"
+        >Registrera dig</a
+      >
+      <button
+        id="logoutBtn"
+        style="
+          display: none;
+          background: #f44336;
+          color: white;
+          border: none;
+          padding: 6px 12px;
+          border-radius: 5px;
+          cursor: pointer;
+        "
+      >
+        Logga ut
+      </button>
+    </div>
+    <!-- Overlay contains the rest -->
+    <div class="overlay">
+      <h1>QuietSpace</h1>
+
+      <!-- Optional wrapper for clean centering -->
+      <div class="formWrapper">
+        <form id="placeForm">
+          <input type="text" id="name" placeholder="Namn" required />
+          <input type="text" id="address" placeholder="Adress" required />
+          <input
+            type="number"
+            id="rating"
+            placeholder="Betyg (1–5)"
+            min="1"
+            max="5"
+            required
+          />
+          <button type="submit">Lägg till plats</button>
+        </form>
+      </div>
+
+      <div id="placeList"></div>
+    </div>
+  </body>
+</html>

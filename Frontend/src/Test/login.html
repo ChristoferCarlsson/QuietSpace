@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="sv">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Logga in</title>
+    <link rel="stylesheet" href="auth.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h2>Logga in</h2>
+      <input type="text" id="email" placeholder="Email" />
+      <input type="password" id="password" placeholder="Lösenord" />
+      <button onclick="login()">Logga in</button>
+      <div class="link">
+        Har du inget konto? <a href="register.html">Registrera dig</a>
+      </div>
+    </div>
+
+    <script>
+      function login() {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const user = JSON.parse(localStorage.getItem("user"));
+        if (!user || user.email !== email || user.password !== password) {
+          return alert("Fel email eller lösenord!");
+        }
+        localStorage.setItem("loggedIn", "true");
+        alert("Välkommen!");
+        window.location.href = "index.html";
+      }
+    </script>
+  </body>
+</html>
